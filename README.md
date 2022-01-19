@@ -1,4 +1,4 @@
-# 🥷**_Git commands ultimate cheat sheet_** 🥷
+# 🥷 **_Git commands ultimate cheat sheet_** 🥷
 
 ### <i>Very basic and rare commands are not included in this list (like configs and so on)</i>
 
@@ -275,3 +275,5 @@ $ git log --oneline
 $ git checkout GOODCOMMITHASH
 $ git checkout -b "new branch with good commit where its last one"
 ```
+
+## **_PULL REQUEST:_**
