@@ -163,7 +163,7 @@ git rebase -i master
 
 ## **_REFLOG:_**
 
-### What is reflog? Reflog basically show of logs deleted and not
+### What is reflog? Reflogs track when Git refs were updated in the local repository. Reflog basically show all local activities.
 
 ```
 $ git reflog
