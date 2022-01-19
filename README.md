@@ -40,7 +40,7 @@ $ git push --delete origin branch_name_here
 $ git push --set-upstream origin <branch name>
 ```
 
-### What is merge with --squash ? It's basically when we merge with branch but add only one commit msg and ignore all commits in that branch
+### What is merge with --squash ? It's basically when we merge with branch but add only one commit msg and ignore all new local commits in that branch
 
 <hr>
 
