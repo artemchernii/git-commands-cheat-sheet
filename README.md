@@ -276,4 +276,30 @@ $ git checkout GOODCOMMITHASH
 $ git checkout -b "new branch with good commit where its last one"
 ```
 
-## **_PULL REQUEST:_**
+## **_PULL REQUEST AND BRANCHING:_**
+
+### When you file a pull request, all you’re doing is requesting that another developer (e.g., the project maintainer) pulls a branch from your repository into their repository.
+
+<hr />
+
+### The general process of the pull requests is as follows:
+
+- A developer creates the feature in a dedicated branch in their local repo.
+
+- The developer pushes the branch to a public Bitbucket repository.
+
+- The developer files a pull request via Bitbucket.
+
+- The rest of the team reviews the code, discusses it, and alters it.
+
+- The project maintainer merges the feature into the official repository and closes the pull request.
+
+<hr/>
+
+### A branch represents an independent line of development. Branches serve as an abstraction for the edit/stage/commit process. You can think of them as a way to request a brand new working directory, staging area, and project history. New commits are recorded in the history for the current branch, which results in a fork in the history of the project.
+
+```
+
+
+
+```
