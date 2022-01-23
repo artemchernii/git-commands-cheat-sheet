@@ -32,6 +32,9 @@ $ git merge jeff/feature1 (name of the branch you want to merge with)
 
 $ git push --delete origin branch_name_here
 - delete remote branch
+
+$ git branch -d feature/login
+- delete local branch
 ```
 
 ## **_Git push:_**
