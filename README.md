@@ -235,6 +235,28 @@ $ git rebase -i HEAD~2  ---- rebasing last two commits
 ````
 Then with VIM you should reword commits and close VIM editor.
 
+### Deleting commits:
+
+Basically with interactive rebase you can delete (drop) commits.
+
+````
+$ git log --oneline 
+$ git rebase -i HEAD~3 
+````
+And then in editor window you can add "drop" in front of the commit you want to delete.
+<br />
+<i><b> You can reorder commits with interactive rebase by simply reorder commits in editor window </b></i>
+
+### Squashing commits:
+
+There is couple of options to squash commits. But here I would like to use interactive rebase with fixup command.
+
+````
+$ git log --oneline 
+$ git rebase -i HEAD~3
+````
+And in the editor VIM window you simple add before squashed commits "fixup" word and that commits are going to be squashed to the last commit.
+
 
 ### What is cherry-pick? it basically allows you to select individual commits to be integrated. In case you commited in wrong branch and want that commit in another one.
 
