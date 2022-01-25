@@ -279,7 +279,7 @@ $ git checkout GOODCOMMITHASH
 $ git checkout -b "new branch with good commit where its last one"
 ```
 
-## **_PULL REQUEST AND BRANCHING:_**
+## **_COLLABORATING:_**
 
 ### When you file a pull request, all you’re doing is requesting that another developer (e.g., the project maintainer) pulls a branch from your repository into their repository.
 
@@ -301,8 +301,103 @@ $ git checkout -b "new branch with good commit where its last one"
 
 ### A branch represents an independent line of development. Branches serve as an abstraction for the edit/stage/commit process. You can think of them as a way to request a brand new working directory, staging area, and project history. New commits are recorded in the history for the current branch, which results in a fork in the history of the project.
 
+
+<br />
+
+## <b> Merging </b>
+
+<hr />
+
+### Fast-forward merge
+
+A fast-forward merge can occur when there is a linear path from the current branch tip to the target branch. Instead of “actually” merging the branches, all Git has to do to integrate the histories is move (i.e., “fast forward”) the current branch tip up to the target branch tip. This effectively combines the histories, since all of the commits reachable from the target branch are now available through the current one.
+<img src="./assets/03-04 Fast forward merge.svg">
+### <i>Example:</i>
+```
+# Start a new feature
+git checkout -b new-feature main
+# Edit some files
+git add <file>
+git commit -m "Start a feature"
+# Edit some files
+git add <file>
+git commit -m "Finish a feature"
+# Merge in the new-feature branch
+git checkout main
+git merge new-feature
+git branch -d new-feature
 ```
 
+<hr />
+
+### 3-way merge
+
+The next example is very similar, but requires a 3-way merge because main progresses while the feature is in-progress. This is a common scenario for large features or when several developers are working on a project simultaneously.
+
+````
+Start a new feature
+git checkout -b new-feature main
+# Edit some files
+git add <file>
+git commit -m "Start a feature"
+# Edit some files
+git add <file>
+git commit -m "Finish a feature"
+# Develop the main branch
+git checkout main
+# Edit some files
+git add <file>
+git commit -m "Make some super-stable changes to main"
+# Merge in the new-feature branch
+git merge new-feature
+git branch -d new-feature
+````
 
 
-```
+### Useful commands: 
+
+````
+$ git log --merge
+
+$ git merge --abort
+````
+
+## **_WORKFLOWS:_**
+
+
+### Centralized Workflow
+
+<strong> Standard Git commit process: edit, stage, and commit. </strong>
+<br />
+
+The --rebase option tells Git to move all of Mary’s commits to the tip of the main branch after synchronising it with the changes from the central repository, as shown below:
+
+````
+$ git pull --rebase origin main
+````
+<img src="assets/rebase.svg">
+
+### Feature Workflow - THE BEST ONE
+
+The Feature Branch Workflow assumes a central repository, and main represents the official project history. Instead of committing directly on their local main branch, developers create a new branch every time they start work on a new feature. Feature branches should have descriptive names, like animated-menu-items or issue-#1061. The idea is to give a clear, highly-focused purpose to each branch. Git makes no technical distinction between the main branch and feature branches, so developers can edit, stage, and commit changes to a feature branch.
+
+<hr> 
+
+<b>Start with the main branch</b>
+
+````
+$ git checkout main
+$ git fetch origin 
+$ git reset --hard origin/main
+````
+This switches the repo to the main branch, pulls the latest commits and resets the repo's local copy of main to match the latest version.
+
+<b>Pulling</b>
+````
+$ git checkout main
+$ git pull
+$ git pull origin marys-feature
+$ git push
+````
+
+
