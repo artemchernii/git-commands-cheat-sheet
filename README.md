@@ -1,10 +1,6 @@
-# 🥷 **_Git commands ultimate cheat sheet_** 🥷
+# 🥷 **_Git commands - ultimate cheat sheet_** 🥷
 
-### <i>Very basic and rare commands are not included in this list (like configs and so on)</i>
-
-##### <i>In case you didn't find any commands you were looking - use google </i>😅😅😅
-
-<hr>
+##### <i>Cheat sheet for personal usage</i>😅😅😅
 
 ## **_Useful commands:_**
 
@@ -413,4 +409,10 @@ The first thing to understand about git rebase is that it solves the same proble
 
 <i><b>The golden rule</b> of git rebase is to never use it on public branches.<i />
 
+
+<img src="assets/rebasingVSmerge.svg">
+
+The rebase moves all of the commits in main onto the tip of feature. The problem is that this only happened in your repository. All of the other developers are still working with the original main. Since rebasing results in brand new commits, Git will think that your main branch’s history has diverged from everybody else’s.
+
+The only way to synchronize the two main branches is to merge them back together, resulting in an extra merge commit and two sets of commits that contain the same changes (the original ones, and the ones from your rebased branch). Needless to say, this is a very confusing situation.
 
