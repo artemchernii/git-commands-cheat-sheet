@@ -1,6 +1,6 @@
 # 🥷 **_Git commands - ultimate cheat sheet_** 🥷
 
-##### <i>Cheat sheet for personal usage</i>😅😅😅
+#### <i>Cheat sheet for personal usage</i>😅😅😅
 
 ## **_Useful commands:_**
 
@@ -211,7 +211,30 @@ $ git clean -f
 - actually remove delete these files
 ```
 
-## **_OTHER USEFUL COMMANDS RELATED TO REWRITING HISTORY:_**
+## **_REWRITING HISTORY:_**
+
+<hr />
+
+### Amending commits:
+
+In case you forgot to commit something. Instead of making another commit you can just do commit with --amend:
+
+````
+$ git add .
+$ git commit --amend --no-edit
+````
+Here we basically add/stage what we forgot to add and commiting it with last commit without any message (--no-edit flag).
+<br />
+### Rewording commits: 
+
+In case we want to rename for example last commit we can do it either with --amend for last commit or interactive rebase: 
+
+````
+$ git log --oneline
+$ git rebase -i HEAD~2  ---- rebasing last two commits
+````
+Then with VIM you should reword commits and close VIM editor.
+
 
 ### What is cherry-pick? it basically allows you to select individual commits to be integrated. In case you commited in wrong branch and want that commit in another one.
 
