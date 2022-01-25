@@ -401,3 +401,16 @@ $ git push
 ````
 
 
+
+## **_ADVANCED COMMANDS & TIPS:_**
+
+<hr />
+
+### Merging vs. Rebasing
+
+<b>CONCEPT: </b>
+The first thing to understand about git rebase is that it solves the same problem as git merge. Both of these commands are designed to integrate changes from one branch into another branch—they just do it in very different ways.
+
+<i><b>The golden rule</b> of git rebase is to never use it on public branches.<i />
+
+
