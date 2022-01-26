@@ -1,3 +1,6 @@
+<!-- TODO: A better structure -->
+
+
 # 🥷 **_Git commands - ultimate cheat sheet_** 🥷
 
 #### <i>Cheat sheet for personal usage</i>😅😅😅
