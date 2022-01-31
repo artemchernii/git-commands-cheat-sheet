@@ -1,6 +1,6 @@
-# 🥷 **_Git commands - ultimate cheat sheet_** 🥷
+# **_Git commands - ultimate cheat sheet_**
 
-#### <i>Cheat sheet for personal usage</i>😅😅😅
+#### <i>Cheat sheet for personal usage</i>
 
 ## **_Useful commands:_**
 
@@ -219,30 +219,34 @@ $ git clean -f
 
 In case you forgot to commit something. Instead of making another commit you can just do commit with --amend:
 
-````
+```
 $ git add .
 $ git commit --amend --no-edit
-````
+```
+
 Here we basically add/stage what we forgot to add and commiting it with last commit without any message (--no-edit flag).
 <br />
-### Rewording commits: 
 
-In case we want to rename for example last commit we can do it either with --amend for last commit or interactive rebase: 
+### Rewording commits:
 
-````
+In case we want to rename for example last commit we can do it either with --amend for last commit or interactive rebase:
+
+```
 $ git log --oneline
 $ git rebase -i HEAD~2  ---- rebasing last two commits
-````
+```
+
 Then with VIM you should reword commits and close VIM editor.
 
 ### Deleting commits:
 
 Basically with interactive rebase you can delete (drop) commits.
 
-````
-$ git log --oneline 
-$ git rebase -i HEAD~3 
-````
+```
+$ git log --oneline
+$ git rebase -i HEAD~3
+```
+
 And then in editor window you can add "drop" in front of the commit you want to delete.
 <br />
 <i><b> You can reorder commits with interactive rebase by simply reorder commits in editor window </b></i>
@@ -251,12 +255,12 @@ And then in editor window you can add "drop" in front of the commit you want to 
 
 There is couple of options to squash commits. But here I would like to use interactive rebase with fixup command.
 
-````
-$ git log --oneline 
+```
+$ git log --oneline
 $ git rebase -i HEAD~3
-````
-And in the editor VIM window you simple add before squashed commits "fixup" word and that commits are going to be squashed to the last commit.
+```
 
+And in the editor VIM window you simple add before squashed commits "fixup" word and that commits are going to be squashed to the last commit.
 
 ### What is cherry-pick? it basically allows you to select individual commits to be integrated. In case you commited in wrong branch and want that commit in another one.
 
@@ -342,7 +346,6 @@ $ git checkout -b "new branch with good commit where its last one"
 
 ### A branch represents an independent line of development. Branches serve as an abstraction for the edit/stage/commit process. You can think of them as a way to request a brand new working directory, staging area, and project history. New commits are recorded in the history for the current branch, which results in a fork in the history of the project.
 
-
 <br />
 
 ## <b> Merging </b>
@@ -353,7 +356,9 @@ $ git checkout -b "new branch with good commit where its last one"
 
 A fast-forward merge can occur when there is a linear path from the current branch tip to the target branch. Instead of “actually” merging the branches, all Git has to do to integrate the histories is move (i.e., “fast forward”) the current branch tip up to the target branch tip. This effectively combines the histories, since all of the commits reachable from the target branch are now available through the current one.
 <img src="./assets/03-04 Fast forward merge.svg">
+
 ### <i>Example:</i>
+
 ```
 # Start a new feature
 git checkout -b new-feature main
@@ -375,7 +380,7 @@ git branch -d new-feature
 
 The next example is very similar, but requires a 3-way merge because main progresses while the feature is in-progress. This is a common scenario for large features or when several developers are working on a project simultaneously.
 
-````
+```
 Start a new feature
 git checkout -b new-feature main
 # Edit some files
@@ -392,19 +397,17 @@ git commit -m "Make some super-stable changes to main"
 # Merge in the new-feature branch
 git merge new-feature
 git branch -d new-feature
-````
+```
 
+### Useful commands:
 
-### Useful commands: 
-
-````
+```
 $ git log --merge
 
 $ git merge --abort
-````
+```
 
 ## **_WORKFLOWS:_**
-
 
 ### Centralized Workflow
 
@@ -413,35 +416,36 @@ $ git merge --abort
 
 The --rebase option tells Git to move all of Mary’s commits to the tip of the main branch after synchronising it with the changes from the central repository, as shown below:
 
-````
+```
 $ git pull --rebase origin main
-````
+```
+
 <img src="assets/rebase.svg">
 
 ### Feature Workflow - THE BEST ONE
 
 The Feature Branch Workflow assumes a central repository, and main represents the official project history. Instead of committing directly on their local main branch, developers create a new branch every time they start work on a new feature. Feature branches should have descriptive names, like animated-menu-items or issue-#1061. The idea is to give a clear, highly-focused purpose to each branch. Git makes no technical distinction between the main branch and feature branches, so developers can edit, stage, and commit changes to a feature branch.
 
-<hr> 
+<hr>
 
 <b>Start with the main branch</b>
 
-````
+```
 $ git checkout main
-$ git fetch origin 
+$ git fetch origin
 $ git reset --hard origin/main
-````
+```
+
 This switches the repo to the main branch, pulls the latest commits and resets the repo's local copy of main to match the latest version.
 
 <b>Pulling</b>
-````
+
+```
 $ git checkout main
 $ git pull
 $ git pull origin marys-feature
 $ git push
-````
-
-
+```
 
 ## **_ADVANCED COMMANDS & TIPS:_**
 
@@ -454,10 +458,8 @@ The first thing to understand about git rebase is that it solves the same proble
 
 <i><b>The golden rule</b> of git rebase is to never use it on public branches.<i />
 
-
 <img src="assets/rebasingVSmerge.svg">
 
 The rebase moves all of the commits in main onto the tip of feature. The problem is that this only happened in your repository. All of the other developers are still working with the original main. Since rebasing results in brand new commits, Git will think that your main branch’s history has diverged from everybody else’s.
 
 The only way to synchronize the two main branches is to merge them back together, resulting in an extra merge commit and two sets of commits that contain the same changes (the original ones, and the ones from your rebased branch). Needless to say, this is a very confusing situation.
-
