@@ -1,4 +1,4 @@
-# **_Git commands - ultimate cheat sheet_**
+# **_Git commands - cheat sheet_**
 
 #### <i>Cheat sheet for personal usage</i>
 
@@ -451,15 +451,39 @@ $ git push
 
 <hr />
 
-### Merging vs. Rebasing
+## Merging vs. Rebasing
 
 <b>CONCEPT: </b>
 The first thing to understand about git rebase is that it solves the same problem as git merge. Both of these commands are designed to integrate changes from one branch into another branch—they just do it in very different ways.
 
-<i><b>The golden rule</b> of git rebase is to never use it on public branches.<i />
+<i><b>The golden rule</b> of git rebase is to never use it on public branches.</i>
 
 <img src="assets/rebasingVSmerge.svg">
 
 The rebase moves all of the commits in main onto the tip of feature. The problem is that this only happened in your repository. All of the other developers are still working with the original main. Since rebasing results in brand new commits, Git will think that your main branch’s history has diverged from everybody else’s.
 
 The only way to synchronize the two main branches is to merge them back together, resulting in an extra merge commit and two sets of commits that contain the same changes (the original ones, and the ones from your rebased branch). Needless to say, this is a very confusing situation.
+
+
+## Reset & Revert & Checkout 
+
+<b>
+Checkout and reset are generally used for making local or private 'undos'. They modify the history of a repository that can cause conflicts when pushing to remote shared repositories. Revert is considered a safe operation for 'public undos' as it creates new history which can be shared remotely and doesn't overwrite history remote team members may be dependent on.
+</b>
+
+### <i>Usage comparison</i>:
+<img src="assets/reset_revert_checkout.png" style="border-radius: 5px;">
+
+<b> git revert should be used to undo changes on a public branch, and git reset should be reserved for undoing changes on a private branch. </b>
+
+You can also think of git revert as a tool for undoing committed changes, while git reset HEAD is for undoing uncommitted changes.
+
+
+
+### Git Cherry Pick
+
+Cherry picking is the act of picking a commit from a branch and applying it to another. git cherry-pick can be useful for undoing changes. For example, say a commit is accidently made to the wrong branch. You can switch to the correct branch and cherry-pick the commit to where it should belong.
+
+
+
+
