@@ -2,8 +2,6 @@
 
 ## **_GIT BRANCHE NAMING:_**
 
-<hr>
-
 ### REGULAR BRANCHES:
 
 - master --- master stable branch
@@ -62,7 +60,80 @@ $ git pull origin marys-feature
 $ git push
 ```
 
-## **_ADVANCED COMMANDS & TIPS:_**
+## **_COLLABORATING:_**
+
+### When you file a pull request, all you’re doing is requesting that another developer (e.g., the project maintainer) pulls a branch from your repository into their repository.
+
+<hr />
+
+### The general process of the pull requests is as follows:
+
+- A developer creates the feature in a dedicated branch in their local repo.
+
+- The developer pushes the branch to a public Bitbucket repository.
+
+- The developer files a pull request via Bitbucket.
+
+- The rest of the team reviews the code, discusses it, and alters it.
+
+- The project maintainer merges the feature into the official repository and closes the pull request.
+
+<hr/>
+
+### A branch represents an independent line of development. Branches serve as an abstraction for the edit/stage/commit process. You can think of them as a way to request a brand new working directory, staging area, and project history. New commits are recorded in the history for the current branch, which results in a fork in the history of the project.
+
+<br />
+
+## <b> Merging </b>
+
+<hr />
+
+### Fast-forward merge
+
+A fast-forward merge can occur when there is a linear path from the current branch tip to the target branch. Instead of “actually” merging the branches, all Git has to do to integrate the histories is move (i.e., “fast forward”) the current branch tip up to the target branch tip. This effectively combines the histories, since all of the commits reachable from the target branch are now available through the current one.
+<img src="./assets/03-04 Fast forward merge.svg">
+
+### <i>Example:</i>
+
+```
+# Start a new feature
+git checkout -b new-feature main
+# Edit some files
+git add <file>
+git commit -m "Start a feature"
+# Edit some files
+git add <file>
+git commit -m "Finish a feature"
+# Merge in the new-feature branch
+git checkout main
+git merge new-feature
+git branch -d new-feature
+```
+
+<hr />
+
+### 3-way merge
+
+The next example is very similar, but requires a 3-way merge because main progresses while the feature is in-progress. This is a common scenario for large features or when several developers are working on a project simultaneously.
+
+```
+Start a new feature
+git checkout -b new-feature main
+# Edit some files
+git add <file>
+git commit -m "Start a feature"
+# Edit some files
+git add <file>
+git commit -m "Finish a feature"
+# Develop the main branch
+git checkout main
+# Edit some files
+git add <file>
+git commit -m "Make some super-stable changes to main"
+# Merge in the new-feature branch
+git merge new-feature
+git branch -d new-feature
+```
 
 <hr />
 
@@ -93,14 +164,168 @@ Checkout and reset are generally used for making local or private 'undos'. They 
 
 You can also think of git revert as a tool for undoing committed changes, while git reset HEAD is for undoing uncommitted changes.
 
+## **_CHECKOUT STARTEGY TO UNDO SOMETHING_**
 
-## **_GIT COMMANDS:_**
+<hr>
 
-## **_Git push:_**
+### In case we have 3 commits:
+
+1-bad
+2-good
+3-good
+
+### What we do:
 
 ```
-$ git push --set-upstream origin <branch name>
+$ git log --oneline
+$ git checkout GOODCOMMITHASH
+$ git checkout -b "new branch with good commit where its last one"
 ```
+
+## **_REWRITING HISTORY:_**
+
+<hr />
+
+### Amending commits:
+
+In case you forgot to commit something. Instead of making another commit you can just do commit with --amend:
+
+```
+$ git add .
+$ git commit --amend --no-edit
+```
+
+Here we basically add/stage what we forgot to add and commiting it with last commit without any message (--no-edit flag).
+<br />
+
+### Rewording commits:
+
+In case we want to rename for example last commit we can do it either with --amend for last commit or interactive rebase:
+
+```
+$ git log --oneline
+$ git rebase -i HEAD~2  ---- rebasing last two commits
+```
+
+Then with VIM you should reword commits and close VIM editor.
+
+### Deleting commits:
+
+Basically with interactive rebase you can delete (drop) commits.
+
+```
+$ git log --oneline
+$ git rebase -i HEAD~3
+```
+
+And then in editor window you can add "drop" in front of the commit you want to delete.
+<br />
+<i><b> You can reorder commits with interactive rebase by simply reorder commits in editor window </b></i>
+
+### Squashing commits:
+
+There is couple of options to squash commits. But here I would like to use interactive rebase with fixup command.
+
+```
+$ git log --oneline
+$ git rebase -i HEAD~3
+```
+
+And in the editor VIM window you simple add before squashed commits "fixup" word and that commits are going to be squashed to the last commit.
+
+### What is cherry-pick? it basically allows you to select individual commits to be integrated. In case you commited in wrong branch and want that commit in another one.
+
+Cherry picking is the act of picking a commit from a branch and applying it to another. git cherry-pick can be useful for undoing changes. For example, say a commit is accidently made to the wrong branch. You can switch to the correct branch and cherry-pick the commit to where it should belong.
+
+```
+$ git cherry-pick "hash of commit"
+- pick specific commit to your branch
+```
+
+## **_REBASE:_**
+
+### Rebase itself has 2 main modes: "manual" and "interactive" mode.
+
+#### Manual rebase:
+
+```
+$ git rebase <base>
+- git rebase in standard mode will automatically take the commits in your current working branch and apply them to the head of the passed branch.
+```
+
+#### What is interactive rebase? it's where we can combine two specific commits into one or rename prevs commits.
+
+```
+$ git rebase -i HEAD~3
+- we are targeting third 3 commit and are going to change it. Then in popup we should use special action word to make changes to specific commit
+
+Interactive mode:
+git rebase -i master
+# p, pick = use commit
+# r, reword = use commit, but edit the commit message
+# e, edit = use commit, but stop for amending
+# s, squash = use commit, but meld into previous commit
+# f, fixup = like "squash", but discard this commit's log message
+# x, exec = run command (the rest of the line) using shell
+# d, drop = remove commit
+```
+
+## **_REFLOG:_**
+
+### What is reflog? Reflogs track when Git refs were updated in the local repository. Reflog basically show all local activities.
+
+```
+$ git reflog
+- shows all commits
+$ git branch "our branch" "hash of commit"
+- here we can bring back our deleted commit
+$ git diff main@{0} main@{1.day.ago}
+- diff the current main branch against main 1 day ago
+```
+
+## **_USEFUL LOGS:_**
+
+```
+$ git log --oneline
+- check commit history
+$ git log --oneline --graph --decorate
+$ git log --oneline --stat --- show nice logs with files that have been modified
+```
+
+### What if we need to search specific commits where someone changed specific files? Basically we can find by author or by file
+
+```
+$ git log -- "FILENAME"
+$ git log --author="NAME"
+$ git log --pretty=format:"%h%x09%an%x09%ad%x09%s"
+- the best logs with author and date
+```
+
+### Realize you forgot to add the changes from main.py
+
+```
+$ git add main.py
+$ git commit --amend --no-edit
+$ git commit --amend
+lets you take the most recent commit and add new staged changes to it
+```
+
+## **_GIT CLEAN:_**
+
+### To remove untracked files use git clean:
+
+```
+$ git clean -n
+- will show which files are going be removed
+$ git clean -f
+- actually remove delete these files
+```
+
+
+
+
+==========================================
+
 
 ### What is merge with --squash ? It's basically when we merge with branch but add only one commit msg and ignore all new local commits in that branch
 
@@ -195,144 +420,6 @@ $ git commit --amend -m "an updated commit message"
 - basically just rewrite commit message for the last commit
 ```
 
-## **_REBASE:_**
-
-### Rebase itself has 2 main modes: "manual" and "interactive" mode.
-
-#### Manual rebase:
-
-```
-$ git rebase <base>
-- git rebase in standard mode will automatically take the commits in your current working branch and apply them to the head of the passed branch.
-```
-
-#### What is interactive rebase? it's where we can combine two specific commits into one or rename prevs commits.
-
-```
-$ git rebase -i HEAD~3
-- we are targeting third 3 commit and are going to change it. Then in popup we should use special action word to make changes to specific commit
-
-Interactive mode:
-git rebase -i master
-# p, pick = use commit
-# r, reword = use commit, but edit the commit message
-# e, edit = use commit, but stop for amending
-# s, squash = use commit, but meld into previous commit
-# f, fixup = like "squash", but discard this commit's log message
-# x, exec = run command (the rest of the line) using shell
-# d, drop = remove commit
-```
-
-## **_REFLOG:_**
-
-### What is reflog? Reflogs track when Git refs were updated in the local repository. Reflog basically show all local activities.
-
-```
-$ git reflog
-- shows all commits
-$ git branch "our branch" "hash of commit"
-- here we can bring back our deleted commit
-$ git diff main@{0} main@{1.day.ago}
-- diff the current main branch against main 1 day ago
-```
-
-## **_USEFUL LOGS:_**
-
-```
-$ git log --oneline
-- check commit history
-$ git log --oneline --graph --decorate
-$ git log --oneline --stat --- show nice logs with files that have been modified
-```
-
-### What if we need to search specific commits where someone changed specific files? Basically we can find by author or by file
-
-```
-$ git log -- "FILENAME"
-$ git log --author="NAME"
-$ git log --pretty=format:"%h%x09%an%x09%ad%x09%s"
-- the best logs with author and date
-```
-
-### Realize you forgot to add the changes from main.py
-
-```
-$ git add main.py
-$ git commit --amend --no-edit
-$ git commit --amend
-lets you take the most recent commit and add new staged changes to it
-```
-
-## **_GIT CLEAN:_**
-
-### To remove untracked files use git clean:
-
-```
-$ git clean -n
-- will show which files are going be removed
-$ git clean -f
-- actually remove delete these files
-```
-
-## **_REWRITING HISTORY:_**
-
-<hr />
-
-### Amending commits:
-
-In case you forgot to commit something. Instead of making another commit you can just do commit with --amend:
-
-```
-$ git add .
-$ git commit --amend --no-edit
-```
-
-Here we basically add/stage what we forgot to add and commiting it with last commit without any message (--no-edit flag).
-<br />
-
-### Rewording commits:
-
-In case we want to rename for example last commit we can do it either with --amend for last commit or interactive rebase:
-
-```
-$ git log --oneline
-$ git rebase -i HEAD~2  ---- rebasing last two commits
-```
-
-Then with VIM you should reword commits and close VIM editor.
-
-### Deleting commits:
-
-Basically with interactive rebase you can delete (drop) commits.
-
-```
-$ git log --oneline
-$ git rebase -i HEAD~3
-```
-
-And then in editor window you can add "drop" in front of the commit you want to delete.
-<br />
-<i><b> You can reorder commits with interactive rebase by simply reorder commits in editor window </b></i>
-
-### Squashing commits:
-
-There is couple of options to squash commits. But here I would like to use interactive rebase with fixup command.
-
-```
-$ git log --oneline
-$ git rebase -i HEAD~3
-```
-
-And in the editor VIM window you simple add before squashed commits "fixup" word and that commits are going to be squashed to the last commit.
-
-### What is cherry-pick? it basically allows you to select individual commits to be integrated. In case you commited in wrong branch and want that commit in another one.
-
-```
-$ git cherry-pick "hash of commit"
-- pick specific commit to your branch
-```
-
-
 <hr>
 
 - git clone -branch new_feature git://remoterepository.git ---- clone specific branch of repo
@@ -346,98 +433,6 @@ $ git cherry-pick "hash of commit"
 
 - git blame README.md --- show who was chaneging this README file and when and basically first line of the content.
 
-## **_CHECKOUT STARTEGY TO UNDO SOMETHING_**
-
-<hr>
-
-### In case we have 3 commits:
-
-1-bad
-2-good
-3-good
-
-### What we do:
-
-```
-$ git log --oneline
-$ git checkout GOODCOMMITHASH
-$ git checkout -b "new branch with good commit where its last one"
-```
-
-## **_COLLABORATING:_**
-
-### When you file a pull request, all you’re doing is requesting that another developer (e.g., the project maintainer) pulls a branch from your repository into their repository.
-
-<hr />
-
-### The general process of the pull requests is as follows:
-
-- A developer creates the feature in a dedicated branch in their local repo.
-
-- The developer pushes the branch to a public Bitbucket repository.
-
-- The developer files a pull request via Bitbucket.
-
-- The rest of the team reviews the code, discusses it, and alters it.
-
-- The project maintainer merges the feature into the official repository and closes the pull request.
-
-<hr/>
-
-### A branch represents an independent line of development. Branches serve as an abstraction for the edit/stage/commit process. You can think of them as a way to request a brand new working directory, staging area, and project history. New commits are recorded in the history for the current branch, which results in a fork in the history of the project.
-
-<br />
-
-## <b> Merging </b>
-
-<hr />
-
-### Fast-forward merge
-
-A fast-forward merge can occur when there is a linear path from the current branch tip to the target branch. Instead of “actually” merging the branches, all Git has to do to integrate the histories is move (i.e., “fast forward”) the current branch tip up to the target branch tip. This effectively combines the histories, since all of the commits reachable from the target branch are now available through the current one.
-<img src="./assets/03-04 Fast forward merge.svg">
-
-### <i>Example:</i>
-
-```
-# Start a new feature
-git checkout -b new-feature main
-# Edit some files
-git add <file>
-git commit -m "Start a feature"
-# Edit some files
-git add <file>
-git commit -m "Finish a feature"
-# Merge in the new-feature branch
-git checkout main
-git merge new-feature
-git branch -d new-feature
-```
-
-<hr />
-
-### 3-way merge
-
-The next example is very similar, but requires a 3-way merge because main progresses while the feature is in-progress. This is a common scenario for large features or when several developers are working on a project simultaneously.
-
-```
-Start a new feature
-git checkout -b new-feature main
-# Edit some files
-git add <file>
-git commit -m "Start a feature"
-# Edit some files
-git add <file>
-git commit -m "Finish a feature"
-# Develop the main branch
-git checkout main
-# Edit some files
-git add <file>
-git commit -m "Make some super-stable changes to main"
-# Merge in the new-feature branch
-git merge new-feature
-git branch -d new-feature
-```
 
 ### Useful commands:
 ```
@@ -477,11 +472,4 @@ $ git log --merge
 
 $ git merge --abort
 ```
-
-### Git Cherry Pick
-
-Cherry picking is the act of picking a commit from a branch and applying it to another. git cherry-pick can be useful for undoing changes. For example, say a commit is accidently made to the wrong branch. You can switch to the correct branch and cherry-pick the commit to where it should belong.
-
-
-
 
