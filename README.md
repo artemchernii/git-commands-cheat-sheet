@@ -1,5 +1,7 @@
 # **_Git commands - cheat sheet_**
 
+Git cheat sheet for personal usage. Git workflow + common commands
+
 ## **_GIT BRANCHE NAMING:_**
 
 ### REGULAR BRANCHES:
