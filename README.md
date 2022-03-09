@@ -1,37 +1,100 @@
 # **_Git commands - cheat sheet_**
 
-#### <i>Cheat sheet for personal usage</i>
+## **_GIT BRANCHE NAMING:_**
 
-## **_Useful commands:_**
+<hr>
+
+### REGULAR BRANCHES:
+
+- master --- master stable branch
+- dev --- development branch
+- qa --- contains all the code for testing
+
+### TEMPORARY BRANCHES:
+
+- Bug fix
+- Hot fix
+- Feature branch
+- WIP
+
+### EXAMPLE:
+
+- wip-8712-add-testing-module
+- bug-logo-alignment-issue
+
+## **_WORKFLOWS:_**
+
+### Centralized Workflow
+
+<strong> Standard Git commit process: edit, stage, and commit. </strong>
+<br />
+
+The --rebase option tells Git to move all of Mary’s commits to the tip of the main branch after synchronising it with the changes from the central repository, as shown below:
 
 ```
-$ git commit -am "commit message"
-- add + commit command
-$ git fetch
-- check if there some changes in branch
-$ git diff filename
-- check diff of files
-$ git checkout -b feature4[new branch] develop[origin branch]
-- creating a Branch from Another Origin Branch
-$ git checkout -b 'new branch name' 'starting point (parent branch)'
-
-$ git pull origin <branch name> (git pull origin feature/addnavbar)
-- download Branch from Remote Repository
-$ git branch
-- see all local branches
-$ git checkout <branch name> (git checkout feature/addnavbar)
-- switch to feature(or any other) branch
-
-Merging Branches in a Local Repository:
-$ git checkout main (or master or any another branch)
-$ git merge jeff/feature1 (name of the branch you want to merge with)
-
-$ git push --delete origin branch_name_here
-- delete remote branch
-
-$ git branch -d feature/login
-- delete local branch
+$ git pull --rebase origin main
 ```
+
+<img src="assets/rebase.svg">
+
+### Feature Workflow - THE BEST ONE
+
+The Feature Branch Workflow assumes a central repository, and main represents the official project history. Instead of committing directly on their local main branch, developers create a new branch every time they start work on a new feature. Feature branches should have descriptive names, like animated-menu-items or issue-#1061. The idea is to give a clear, highly-focused purpose to each branch. Git makes no technical distinction between the main branch and feature branches, so developers can edit, stage, and commit changes to a feature branch.
+
+<hr>
+
+<b>Start with the main branch</b>
+
+```
+$ git checkout main
+$ git fetch origin
+$ git reset --hard origin/main
+```
+
+This switches the repo to the main branch, pulls the latest commits and resets the repo's local copy of main to match the latest version.
+
+<b>Pulling</b>
+
+```
+$ git checkout main
+$ git pull
+$ git pull origin marys-feature
+$ git push
+```
+
+## **_ADVANCED COMMANDS & TIPS:_**
+
+<hr />
+
+## Merging vs. Rebasing
+
+<b>CONCEPT: </b>
+The first thing to understand about git rebase is that it solves the same problem as git merge. Both of these commands are designed to integrate changes from one branch into another branch—they just do it in very different ways.
+
+<i><b>The golden rule</b> of git rebase is to never use it on public branches.</i>
+
+<img src="assets/rebasingVSmerge.svg">
+
+The rebase moves all of the commits in main onto the tip of feature. The problem is that this only happened in your repository. All of the other developers are still working with the original main. Since rebasing results in brand new commits, Git will think that your main branch’s history has diverged from everybody else’s.
+
+The only way to synchronize the two main branches is to merge them back together, resulting in an extra merge commit and two sets of commits that contain the same changes (the original ones, and the ones from your rebased branch). Needless to say, this is a very confusing situation.
+
+
+## Reset & Revert & Checkout 
+
+<b>
+Checkout and reset are generally used for making local or private 'undos'. They modify the history of a repository that can cause conflicts when pushing to remote shared repositories. Revert is considered a safe operation for 'public undos' as it creates new history which can be shared remotely and doesn't overwrite history remote team members may be dependent on.
+</b>
+
+### <i>Usage comparison</i>:
+<img src="assets/reset_revert_checkout.png" style="border-radius: 5px;">
+
+<b> git revert should be used to undo changes on a public branch, and git reset should be reserved for undoing changes on a private branch. </b>
+
+You can also think of git revert as a tool for undoing committed changes, while git reset HEAD is for undoing uncommitted changes.
+
+
+## **_GIT COMMANDS:_**
 
 ## **_Git push:_**
 
@@ -269,29 +332,6 @@ $ git cherry-pick "hash of commit"
 - pick specific commit to your branch
 ```
 
-## **_GIT BRANCHE NAMING:_**
-
-<hr>
-
-### REGULAR BRANCHES:
-
-- master --- master stable branch
-- dev --- development branch
-- qa --- contains all the code for testing
-
-### TEMPORARY BRANCHES:
-
-- Bug fix
-- Hot fix
-- Feature branch
-- WIP
-
-### EXAMPLE:
-
-- wip-8712-add-testing-module
-- bug-logo-alignment-issue
-
-## **_GIT ADDITIONAL USEFUL COMMANDS:_**
 
 <hr>
 
@@ -400,85 +440,43 @@ git branch -d new-feature
 ```
 
 ### Useful commands:
+```
+$ git commit -am "commit message"
+- add + commit command
+$ git fetch
+- check if there some changes in branch
+$ git diff filename
+- check diff of files
+$ git checkout -b feature4[new branch] develop[origin branch]
+- creating a Branch from Another Origin Branch
+$ git checkout -b 'new branch name' 'starting point (parent branch)'
+
+$ git pull origin <branch name> (git pull origin feature/addnavbar)
+- download Branch from Remote Repository
+$ git branch
+- see all local branches
+$ git checkout <branch name> (git checkout feature/addnavbar)
+- switch to feature(or any other) branch
+
+Merging Branches in a Local Repository:
+$ git checkout main (or master or any another branch)
+$ git merge jeff/feature1 (name of the branch you want to merge with)
+
+$ git push --delete origin branch_name_here
+- delete remote branch
+
+$ git branch -d feature/login
+- delete local branch
+
+$ git branch -r 
+- show all remote branches
+```
 
 ```
 $ git log --merge
 
 $ git merge --abort
 ```
-
-## **_WORKFLOWS:_**
-
-### Centralized Workflow
-
-<strong> Standard Git commit process: edit, stage, and commit. </strong>
-<br />
-
-The --rebase option tells Git to move all of Mary’s commits to the tip of the main branch after synchronising it with the changes from the central repository, as shown below:
-
-```
-$ git pull --rebase origin main
-```
-
-<img src="assets/rebase.svg">
-
-### Feature Workflow - THE BEST ONE
-
-The Feature Branch Workflow assumes a central repository, and main represents the official project history. Instead of committing directly on their local main branch, developers create a new branch every time they start work on a new feature. Feature branches should have descriptive names, like animated-menu-items or issue-#1061. The idea is to give a clear, highly-focused purpose to each branch. Git makes no technical distinction between the main branch and feature branches, so developers can edit, stage, and commit changes to a feature branch.
-
-<hr>
-
-<b>Start with the main branch</b>
-
-```
-$ git checkout main
-$ git fetch origin
-$ git reset --hard origin/main
-```
-
-This switches the repo to the main branch, pulls the latest commits and resets the repo's local copy of main to match the latest version.
-
-<b>Pulling</b>
-
-```
-$ git checkout main
-$ git pull
-$ git pull origin marys-feature
-$ git push
-```
-
-## **_ADVANCED COMMANDS & TIPS:_**
-
-<hr />
-
-## Merging vs. Rebasing
-
-<b>CONCEPT: </b>
-The first thing to understand about git rebase is that it solves the same problem as git merge. Both of these commands are designed to integrate changes from one branch into another branch—they just do it in very different ways.
-
-<i><b>The golden rule</b> of git rebase is to never use it on public branches.</i>
-
-<img src="assets/rebasingVSmerge.svg">
-
-The rebase moves all of the commits in main onto the tip of feature. The problem is that this only happened in your repository. All of the other developers are still working with the original main. Since rebasing results in brand new commits, Git will think that your main branch’s history has diverged from everybody else’s.
-
-The only way to synchronize the two main branches is to merge them back together, resulting in an extra merge commit and two sets of commits that contain the same changes (the original ones, and the ones from your rebased branch). Needless to say, this is a very confusing situation.
-
-
-## Reset & Revert & Checkout 
-
-<b>
-Checkout and reset are generally used for making local or private 'undos'. They modify the history of a repository that can cause conflicts when pushing to remote shared repositories. Revert is considered a safe operation for 'public undos' as it creates new history which can be shared remotely and doesn't overwrite history remote team members may be dependent on.
-</b>
-
-### <i>Usage comparison</i>:
-<img src="assets/reset_revert_checkout.png" style="border-radius: 5px;">
-
-<b> git revert should be used to undo changes on a public branch, and git reset should be reserved for undoing changes on a private branch. </b>
-
-You can also think of git revert as a tool for undoing committed changes, while git reset HEAD is for undoing uncommitted changes.
-
-
 
 ### Git Cherry Pick
 
